@@ -51,7 +51,8 @@ python main.py --model WGAN-GP \
                --dataset cifar \
                --generator_iters 40000 \
                --cuda True \
-               --batch_size 64
+               --batch_size 64 \
+               --lr 1e-2 
 ```
 
 Start tensorboard:
