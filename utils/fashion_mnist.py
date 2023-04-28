@@ -41,7 +41,7 @@ class MNIST(data.Dataset):
         self.target_transform = target_transform
         self.train = train  # training set or test set
 
-        if download:
+        if download == 'True':
             self.download()
 
         if not self._check_exists():
