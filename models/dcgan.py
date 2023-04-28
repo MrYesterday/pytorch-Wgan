@@ -233,8 +233,10 @@ class DCGAN_MODEL(object):
                     }
 
                     for tag, value in info.items():
-                        self.logger.scalar_summary(tag, value.cpu(), generator_iter)
-
+                        with torch.no_grad():
+                            value_cpu = value.cpu()
+                        self.logger.scalar_summary(tag, value_cpu, generator_iter)
+                        del value_cpu  # free mem
                     # Log values and gradients of the parameters
                     for tag, value in self.D.named_parameters():
                         tag = tag.replace('.', '/')
