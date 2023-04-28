@@ -92,9 +92,9 @@ class WGAN_CP(object):
         self.check_cuda(args.cuda)
 
         # WGAN values from paper
-        self.learning_rate = 0.00005
+        self.learning_rate = args.lr
 
-        self.batch_size = 64
+        self.batch_size = args.batch_size
         self.weight_cliping_limit = 0.01
 
         # WGAN with gradient clipping uses RMSprop instead of ADAM
