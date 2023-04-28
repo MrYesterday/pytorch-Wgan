@@ -233,7 +233,7 @@ class DCGAN_MODEL(object):
                     }
 
                     for tag, value in info.items():
-                        self.logger.scalar_summary(tag, value, generator_iter)
+                        self.logger.scalar_summary(tag, value.cpu(), generator_iter)
 
                     # Log values and gradients of the parameters
                     for tag, value in self.D.named_parameters():
