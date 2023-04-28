@@ -1,3 +1,6 @@
+## update config
+Add learning rate args and batch_size args.
+In the previous version, these two parameters did not work in wgan cp model or wgan gp model.
 ## Pytorch code for GAN models
 This is the pytorch implementation of 3 different GAN models using same convolutional architecture.
 
