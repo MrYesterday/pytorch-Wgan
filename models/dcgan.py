@@ -18,17 +18,17 @@ class Generator(torch.nn.Module):
             # Z latent vector 100
             nn.ConvTranspose2d(in_channels=100, out_channels=1024, kernel_size=4, stride=1, padding=0),
             nn.BatchNorm2d(num_features=1024),
-            nn.ReLU(True),
+            nn.ReLU(),
 
             # State (1024x4x4)
             nn.ConvTranspose2d(in_channels=1024, out_channels=512, kernel_size=4, stride=2, padding=1),
             nn.BatchNorm2d(num_features=512),
-            nn.ReLU(True),
+            nn.ReLU(),
 
             # State (512x8x8)
             nn.ConvTranspose2d(in_channels=512, out_channels=256, kernel_size=4, stride=2, padding=1),
             nn.BatchNorm2d(num_features=256),
-            nn.ReLU(True),
+            nn.ReLU(),
 
             # State (256x16x16)
             nn.ConvTranspose2d(in_channels=256, out_channels=channels, kernel_size=4, stride=2, padding=1))
@@ -50,17 +50,17 @@ class Discriminator(torch.nn.Module):
         self.main_module = nn.Sequential(
             # Image (Cx32x32)
             nn.Conv2d(in_channels=channels, out_channels=256, kernel_size=4, stride=2, padding=1),
-            nn.LeakyReLU(0.2, inplace=True),
+            nn.LeakyReLU(0.2),
 
             # State (256x16x16)
             nn.Conv2d(in_channels=256, out_channels=512, kernel_size=4, stride=2, padding=1),
             nn.BatchNorm2d(512),
-            nn.LeakyReLU(0.2, inplace=True),
+            nn.LeakyReLU(0.2),
 
             # State (512x8x8)
             nn.Conv2d(in_channels=512, out_channels=1024, kernel_size=4, stride=2, padding=1),
             nn.BatchNorm2d(1024),
-            nn.LeakyReLU(0.2, inplace=True))
+            nn.LeakyReLU(0.2))
             # outptut of main module --> State (1024x4x4)
 
         self.output = nn.Sequential(
@@ -233,15 +233,13 @@ class DCGAN_MODEL(object):
                     }
 
                     for tag, value in info.items():
-                        with torch.no_grad():
-                            value_cpu = value.cpu()
-                        self.logger.scalar_summary(tag, value_cpu, generator_iter)
-                        del value_cpu  # free mem
-                    # Log values and gradients of the parameters
-                    for tag, value in self.D.named_parameters():
-                        tag = tag.replace('.', '/')
-                        self.logger.histo_summary(tag, self.to_np(value), generator_iter)
-                        self.logger.histo_summary(tag + '/grad', self.to_np(value.grad), generator_iter)
+                        self.logger.scalar_summary(tag, float(value.cpu()), generator_iter)
+
+                    # # Log values and gradients of the parameters
+                    # for tag, value in self.D.named_parameters():
+                    #     tag = tag.replace('.', '/')
+                    #     self.logger.histo_summary(tag, self.to_np(value), generator_iter)
+                    #     self.logger.histo_summary(tag + '/grad', self.to_np(value.grad), generator_iter)
 
                     # Log the images while training
                     info = {
